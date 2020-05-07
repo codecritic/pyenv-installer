@@ -1,51 +1,88 @@
 pyenv installer
 ===============
 
-This tool installs ``pyenv`` and friends. It is inspired by `rbenv-installer <https://github.com/fesplugas/rbenv-installer>`__.
+This tool installs `pyenv <https://github.com/pyenv/pyenv>`__ and friends. It is inspired by `rbenv-installer <https://github.com/rbenv/rbenv-installer>`__.
+
+Prerequisites
+----
+In general, compiling your own Python interpreter requires the installation of the
+appropriate libraries and packages.  The `installation wiki
+<https://github.com/pyenv/pyenv/wiki/Common-build-problems>`__ provides a list of these for common
+operating systems.
+
 
 Installation / Update / Uninstallation
 --------------------------------------
+Once prerequisites have been installed correctly: 
 
-There are two ways to install `pyenv <https://github.com/yyuu/pyenv>`__.
-The PyPi support is not tested by many users yet, so the
-direct way ist still recommended if you want to play it safe.
+Install:
+~~~~
+.. code:: bash
 
-Github way (recommended)
-~~~~~~~~~~~~~~~~~~~~~~~~
+    $ curl https://pyenv.run | bash
+    
+``pyenv.run`` redirects to the install script in this repository and the invocation above is equivalent to::
 
-Install::
+    $ curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
 
-    $ curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
+Restart your shell so the path changes take effect:
 
-Update::
+.. code:: bash
+
+    $ exec $SHELL
+
+You can now begin using pyenv.
+
+If you need, ``export USE_GIT_URI`` to use ``git://`` instead of ``https://`` for git clone.
+
+Update:
+~~~~
+.. code:: bash
 
     $ pyenv update
 
-Uninstall: ``pyenv`` is installed within ``$PYENV_ROOT``
-(default: ``~/.pyenv``). To uninstall, just remove it::
+Uninstall:
+~~~~
+
+``pyenv`` is installed within ``$PYENV_ROOT``
+(default: ``~/.pyenv``). To uninstall, just remove it:
+
+.. code:: bash
 
     $ rm -fr ~/.pyenv
+    
+then remove these three lines from ``.bashrc``:
 
-PyPi way
-~~~~~~~~
+.. code:: bash
 
-**WARNING** note the necessary use of the --egg parameter
+    export PATH="$HOME/.pyenv/bin:$PATH"
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
 
-Install::
+and finally, restart your shell:
 
-    $ pip install --egg pyenv
+.. code:: bash
+
+          $ exec $SHELL
+
+          
 
 
-In the current implementation updates and uninstallation works exactly like
-the github way.
+Using pyenv-installer on Travis CI
+----------------------------------
 
-**NOTE**: ``pip freeze`` will not show pyenv as installed as this tool is just a
-thin wrapper around the shell install script.
+Travis itself uses pyenv and therefore ``PYENV_ROOT`` is set already. To make it work anyway the installation for pyenv-installer needs to look like this::
+
+  [...]
+  - unset PYENV_ROOT
+  - curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+  - export PATH="$HOME/.pyenv/bin:$PATH"
+  - pyenv install 3.5.2
 
 Development and testing
 -----------------------
 
-The `project on github <https://github.com/yyuu/pyenv-installer>`__ contains
+The `project on github <https://github.com/pyenv/pyenv-installer>`__ contains
 a setup for vagrant to test the installer inside a vagrant managed virtual image.
 
 If you don't know vagrant yet: just `install the latest
@@ -63,7 +100,7 @@ something like ``vagrant@vagrant-ubuntu-trusty-64:~$``
 The project (this repository) is mapped into the vagrant image at
 /vagrant
 
-::
+.. code:: bash
 
     $ cd /vagrant
     $ python setup.py install
@@ -77,6 +114,11 @@ Pyenv should be installed and responding now.
 
 Version History
 ---------------
+
+20190111
+~~~~~~~~
+
+-  Remove experimental PyPi support and replace with a dummy package.
 
 20150113
 ~~~~~~~~
@@ -92,25 +134,4 @@ Version History
 License
 -------
 
-(The MIT License)
-
--  Copyright (c) 2013-2015 Yamashita, Yuu
-
-| Permission is hereby granted, free of charge, to any person obtaining
-| a copy of this software and associated documentation files (the
-| "Software"), to deal in the Software without restriction, including
-| without limitation the rights to use, copy, modify, merge, publish,
-| distribute, sublicense, and/or sell copies of the Software, and to
-| permit persons to whom the Software is furnished to do so, subject to
-| the following conditions:
-
-| The above copyright notice and this permission notice shall be
-| included in all copies or substantial portions of the Software.
-
-| THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-| EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-| MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-| NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-| LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-| OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-| WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+MIT - see `License file <LICENSE>`_.
